@@ -73,13 +73,17 @@ const cards = ref([
         </li>
       </ul>
     </div>
-    <div class="content">
+    <div class="content lg:min-h-screen">
       <div
         :style="{ backgroundImage: `url(${Banner})` }"
         class="w-full xl:h-[634px] h-[44vw] bg-cover flex justify-end items-end"
       >
-        <div class="text-white text-right xl:pr-[44.75px] xl:pb-[36.85px]">
-          <h1 class="font-bold xl:text-5xl lg:leading-[65px] pb-[4px]">
+        <div
+          class="text-white text-right xl:pr-[45px] xl:pb-[37px] lg:pr-[3.125vw] lg:pb-[2.6vw]"
+        >
+          <h1
+            class="font-bold xl:text-5xl lg:text-[3.3vw] xl:leading-[65px] lg:leading-[4.5vw] pb-[4px]"
+          >
             白頭翁 (Chinese bulbul)
           </h1>
           <p class="xl:text-lg lg:leading-[25px]">
@@ -89,14 +93,14 @@ const cards = ref([
         </div>
       </div>
       <div
-        class="w-full xl:h-[367.15px] xl:pt-[58.15px] xl:px-[50.74px] lg:h-[25.5vw] lg:pt-[4vw] lg:px-[3.5vw] flex justify-between"
+        class="w-full xl:h-[367.15px] xl:pt-[58.15px] xl:px-[50.74px] xl-pb-0 lg:h-auto lg:py-[4vw] lg:px-0 flex xl:justify-between lg:justify-around"
       >
         <div
           v-for="card in cards"
           :key="card.title"
-          class="xl:w-[278.51px] lg:w-[19vw] flex justify-between items-start"
+          class="xl:w-[278.51px] lg:w-[30%] flex justify-between items-start"
         >
-          <h3 class="card-title font-bold xl:text-4xl lg:text-2xl relative">
+          <h3 class="card-title font-bold text-4xl relative">
             <span>{{ card.title }}</span>
             <div
               class="absolute z-10 right-[-13px] bottom-[-12px] w-[25px] h-[25px] opacity-60"
