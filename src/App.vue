@@ -2,12 +2,20 @@
 import { ref } from "vue";
 import Banner from "./assets/banner.webp";
 
+const linkActive = ref(1);
+
 const sidebarLinks = ref([
-  { name: "白頭翁的特性", active: true },
-  { name: "白頭翁的故事", active: false },
-  { name: "白頭翁的美照", active: false },
-  { name: "白頭翁的危機", active: false },
+  { name: "白頭翁的特性", id: 1 },
+  { name: "白頭翁的故事", id: 2 },
+  { name: "白頭翁的美照", id: 3 },
+  { name: "白頭翁的危機", id: 4 },
 ]);
+
+const handleActive = (id) => {
+  if (id) {
+    linkActive.value = id;
+  }
+};
 
 const cards = ref([
   {
@@ -46,13 +54,17 @@ const cards = ref([
         白頭翁不吃小米
       </h2>
       <ul class="xl:pt-[75.67px] lg:pt-[5.3vw]">
-        <li v-for="link in sidebarLinks" :key="link.name">
+        <li
+          v-for="link in sidebarLinks"
+          :key="link.id"
+          @click="handleActive(link.id)"
+        >
           <a
             href="#"
             :class="[
-              'leading-[21px] mb-[21px] inline-block hover:border-[#AA6666] border-b-[1px]',
+              'leading-[21px] mb-[21px] inline-block',
               {
-                active: link.active,
+                active: linkActive === link.id,
               },
             ]"
           >
