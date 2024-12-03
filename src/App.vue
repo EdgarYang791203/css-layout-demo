@@ -1,5 +1,6 @@
 <script setup>
 import { ref } from "vue";
+import BirdLogo from "./components/BirdLogo.vue";
 import Banner from "./assets/banner.webp";
 
 const linkActive = ref(1);
@@ -34,35 +35,63 @@ const cards = ref([
       "以果樹的漿果和種子為主食，並時常飛入果園偷吃果實，還會吃嫩葉嫩芽，尤其是胡蝶蘭的嫩葉嫩芽葉，偶爾啄食昆蟲。",
   },
 ]);
+
+const isMenuOpen = ref(false);
+
+const handleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
 </script>
 
 <template>
-  <div class="layout text-center">
-    <div class="logo xl:top-[46.67px] lg:top-[3.2vw]">
-      <div class="bird-wrap">
-        <div class="bird">
-          <div class="stripe"></div>
-        </div>
-      </div>
-    </div>
+  <div class="layout text-center lg:flex-nowrap flex-wrap">
+    <BirdLogo
+      classList="xl:top-[46.67px] lg:top-[3.2vw] lg:flex lg:absolute hidden"
+      styleList="left: calc(24% - 48.78px);"
+    />
     <div
-      class="sidebar xl:pt-[78.33px] xl:px-[67.5px] lg:pt-[5.4vw] lg:px-[4.7vw]"
+      class="sidebar xl:pt-[78.33px] xl:px-[67.5px] lg:w-[24%] lg:max-w-[345px] lg:pt-[5.4vw] lg:px-[4.7vw] w-full lg:z-0 z-10"
+      style="box-shadow: 0 4px 4px rgba(0, 0, 0, 0.2)"
     >
-      <h2
-        class="font-bold xl:text-3xl xl:leading-10 lg:text-[2vw] lg:leading-[2.8vw]"
+      <div
+        class="w-full lg:p-0 p-[8vw] lg:block flex lg:justify-start justify-between items-center relative"
       >
-        白頭翁不吃小米
-      </h2>
-      <ul class="xl:pt-[75.67px] lg:pt-[5.3vw]">
+        <span class="lg:hidden inline-block" @click="handleMenu">
+          <img
+            v-if="!isMenuOpen"
+            class="w-[24px]"
+            src="./assets/menu.svg"
+            alt="menu"
+          />
+          <img v-else class="w-[24px]" src="./assets/close.svg" alt="menu" />
+        </span>
+        <h2
+          class="font-bold xl:text-3xl xl:leading-10 lg:text-[2vw] lg:leading-[2.8vw] text-[20px] leading-[27px] flex-1"
+        >
+          白頭翁不吃小米
+        </h2>
+        <span class="lg:hidden inline-block"></span>
+        <BirdLogo
+          classList="lg:hidden flex scale-50 absolute"
+          styleList="top: calc(50% - 48.78px); right: calc(5vw - 22px)"
+        />
+      </div>
+      <ul
+        :class="[
+          'xl:pt-[75.67px] lg:pt-[5.3vw] lg:h-auto lg:opacity-100 h-0 opacity-0 transition-all',
+          { 'h-[53.1vw] opacity-100': isMenuOpen },
+        ]"
+      >
         <li
           v-for="link in sidebarLinks"
           :key="link.id"
           @click="handleActive(link.id)"
+          class="mb-[21px]"
         >
           <a
             href="#"
             :class="[
-              'leading-[21px] mb-[21px] inline-block',
+              'lg:leading-[21px] text-lg leading-[25px] inline-block',
               {
                 active: linkActive === link.id,
               },
@@ -73,44 +102,53 @@ const cards = ref([
         </li>
       </ul>
     </div>
-    <div class="content lg:min-h-screen">
+    <div
+      class="content lg:w-[76%] lg:max-w-[1095px] w-[100%] max-w-none bg-[#dcccbc] lg:min-h-screen"
+    >
       <div
         :style="{ backgroundImage: `url(${Banner})` }"
-        class="w-full xl:h-[634px] h-[44vw] bg-cover flex justify-end items-end"
+        class="w-full xl:h-[634px] lg:h-[44vw] h-[83vw] bg-cover flex justify-end items-end"
       >
         <div
-          class="text-white text-right xl:pr-[45px] xl:pb-[37px] lg:pr-[3.125vw] lg:pb-[2.6vw]"
+          class="text-white xl:pr-[45px] xl:pb-[37px] lg:pr-[3.125vw] lg:pb-[2.6vw]"
         >
           <h1
-            class="font-bold xl:text-5xl lg:text-[3.3vw] xl:leading-[65px] lg:leading-[4.5vw] pb-[4px]"
+            class="font-bold text-right xl:text-5xl lg:text-[3.3vw] text-[48px] xl:leading-[65px] lg:leading-[4.5vw] leading-[50px] sm:pb-[4px] pb-[9.35px] sm:w-full w-[76vw] lg:pr-0 pr-[7.2vw] ml-auto"
           >
             白頭翁 (Chinese bulbul)
           </h1>
-          <p class="xl:text-lg lg:leading-[25px]">
+          <p
+            class="text-right xl:text-lg lg:leading-[25px] lg:w-full w-[88vw] mr-[6vw] lg:pb-0 pb-[6.4vw]"
+          >
             又名白頭鵯。以果實、昆蟲為主食，無法消化小米、穀類。平均壽命約 8~10
             年。
           </p>
         </div>
       </div>
       <div
-        class="w-full xl:h-[367.15px] xl:pt-[58.15px] xl:px-[50.74px] xl-pb-0 lg:h-auto lg:py-[4vw] lg:px-0 flex xl:justify-between lg:justify-around"
+        class="w-full xl:pt-[58.15px] xl:px-[50.74px] sm:px-[3.5vw] px-[9.7vw] xl:pb-[84px] lg:pb-[5.8vw] pb-[19.2vw] lg:pt-[4.1vw] pt-[13.56vw] flex lg:flex-row lg:justify-between lg:items-start flex-col justify-start items-center"
       >
         <div
-          v-for="card in cards"
+          v-for="(card, index) in cards"
           :key="card.title"
-          class="xl:w-[278.51px] lg:w-[30%] flex justify-between items-start"
+          :class="[
+            'xl:w-[278.51px] lg:w-[30%] w-auto flex justify-between items-start',
+            { 'lg:mt-0 mt-[13.5vw]': index > 0 },
+          ]"
         >
           <h3 class="card-title font-bold text-4xl relative">
             <span>{{ card.title }}</span>
             <div
-              class="absolute z-10 right-[-13px] bottom-[-12px] w-[25px] h-[25px] opacity-60"
+              class="absolute z-10 right-[-1rem] bottom-[-12px] w-[25px] h-[25px] opacity-60"
             >
               <div
                 class="bg-[#AA6666] rounded-[50%] w-full h-full relative before:z-10 before:absolute before:w-[9px] before:h-[9px] before:top-[8px] before:left-[8px] before:bg-[#DCCCBC] before:rounded-[50%]"
               ></div>
             </div>
           </h3>
-          <p class="tracking-normal xl:w-[199.66px] lg:w-[13.9vw] text-left">
+          <p
+            class="tracking-normal xl:w-[199.66px] lg:ml-0 lg:w-[13.9vw] ml-[10.1vw] text-left"
+          >
             {{ card.content }}
           </p>
         </div>
@@ -126,76 +164,6 @@ const cards = ref([
   margin: 0 auto;
   display: flex;
   position: relative;
-}
-.logo {
-  position: absolute;
-  z-index: 5;
-  left: calc(24% - 48.78px);
-  width: 97.56px;
-  height: 97.56px;
-  border-radius: 50%;
-  background-color: #fff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-.bird-wrap {
-  width: 75.96px;
-  height: 66.97px;
-  padding: 10px;
-  /* border: 1px solid #000; */
-}
-.bird {
-  background-color: #333;
-  width: 100%;
-  height: 100%;
-  border-top-left-radius: 64% 30px;
-  border-top-right-radius: 25px 46%;
-  border-bottom-right-radius: 20px 45%;
-  position: relative;
-}
-.bird::after {
-  content: "";
-  position: absolute;
-  z-index: 10;
-  width: 9px;
-  height: 9px;
-  background-color: #333;
-  border-radius: 50%;
-  top: calc(50% - 5px);
-  right: 20%;
-}
-.bird::before {
-  content: "";
-  position: absolute;
-  z-index: 10;
-  width: 13px;
-  height: 7.5px;
-  background-color: #333;
-  top: 13px;
-  right: -9px;
-  border-radius: 0 100% 0 0;
-  transform: rotate(-12deg);
-}
-.stripe {
-  position: absolute;
-  z-index: 5;
-  left: 0;
-  top: 10px;
-  width: 100%;
-  height: calc(100% - 20px);
-  background-color: #fff;
-  border-top-left-radius: 100% 25px;
-  border-top-right-radius: 25px 30%;
-  border-bottom-right-radius: 30px 60%;
-}
-.sidebar {
-  width: 24%;
-  max-width: 345px;
-}
-.content {
-  flex: 1;
-  background-color: #dcccbc;
 }
 .card-title {
   -webkit-writing-mode: vertical-lr;
