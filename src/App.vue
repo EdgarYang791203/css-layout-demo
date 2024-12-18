@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 import BirdLogo from "./components/BirdLogo.vue";
-import Banner from "./assets/banner.webp";
+import Banner from "./assets/Banner.webp";
 
 const linkActive = ref(1);
 
