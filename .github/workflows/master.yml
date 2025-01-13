@@ -1,8 +1,9 @@
-name: Deploy static content to Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: ["master"]
+    branches:
+      - master
   workflow_dispatch:
 
 permissions:
@@ -10,44 +11,39 @@ permissions:
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: true
-
 jobs:
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
 
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 22
-          cache: "npm"
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: npm install
-        env:
-          VITE_PUBLIC_PATH: ${{ secrets.VITE_PUBLIC_PATH }}
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 22
+      
+    - name: Install dependencies
+      run: npm install
+    
+    - name: Build
+      run: npm run build
 
-      - name: Build
-        run: npm run build
-        env:
-          VITE_PUBLIC_PATH: ${{ secrets.VITE_PUBLIC_PATH }}
+    - name: Upload artifact
+      uses: actions/upload-pages-artifact@v3
+      with:
+        name: dist
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
+deploy:
+  needs: build
+  runs-on: ubuntu-latest
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: "./dist"
+  environment:
+    name: production
+    url: ${{ steps.deployment.outputs.page_url }}
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v1
+  steps:
+    - name: Deploy to GitHub Pages
+    id: deployment
+    uses: actions/deploy-pages@v4
