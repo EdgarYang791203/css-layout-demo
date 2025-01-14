@@ -3,8 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - master
-  workflow_dispatch:
+      - master # 當推送到 master 分支時觸發
+  workflow_dispatch: # 允許手動觸發
 
 permissions:
   contents: read
@@ -15,35 +15,40 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    steps:
+      # 檢出代碼
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 22
-      
-    - name: Install dependencies
-      run: npm install
-    
-    - name: Build
-      run: npm run build
+      # 設置 Node.js 環境
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
 
-    - name: Upload artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        name: dist
+      # 安裝依賴
+      - name: Install dependencies
+        run: npm install
 
-deploy:
-  needs: build
-  runs-on: ubuntu-latest
+      # 構建專案
+      - name: Build
+        run: npm run build
 
-  environment:
-    name: production
-    url: ${{ steps.deployment.outputs.page_url }}
+      # 上傳構建的 artifact
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist # 確保指定的是構建輸出的目錄
 
-  steps:
-    - name: Deploy to GitHub Pages
-    id: deployment
-    uses: actions/deploy-pages@v4
+  deploy:
+    needs: build # 確保 build 階段完成後再執行部署
+    runs-on: ubuntu-latest
+    environment:
+      name: production # 設置環境名稱
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      # 部署到 GitHub Pages
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
