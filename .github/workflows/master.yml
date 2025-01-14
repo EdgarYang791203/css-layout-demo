@@ -1,54 +1,53 @@
-name: Deploy to GitHub Pages
+name: Deploy static content to Pages
 
 on:
   push:
-    branches:
-      - master # 當推送到 master 分支時觸發
-  workflow_dispatch: # 允許手動觸發
+    branches: ["master"]
+  workflow_dispatch:
 
 permissions:
   contents: read
   pages: write
   id-token: write
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
     steps:
-      # 檢出代碼
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v3
 
-      # 設置 Node.js 環境
-      - name: Setup Node.js
+      - name: Set up Node
         uses: actions/setup-node@v3
         with:
           node-version: 22
+          cache: "npm"
 
-      # 安裝依賴
       - name: Install dependencies
         run: npm install
+        env:
+          VITE_PUBLIC_PATH: ${{ secrets.VITE_PUBLIC_PATH }}
 
-      # 構建專案
       - name: Build
         run: npm run build
+        env:
+          VITE_PUBLIC_PATH: ${{ secrets.VITE_PUBLIC_PATH }}
 
-      # 上傳構建的 artifact
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v1
         with:
-          path: ./dist # 確保指定的是構建輸出的目錄
+          path: "./dist"
 
-  deploy:
-    needs: build # 確保 build 階段完成後再執行部署
-    runs-on: ubuntu-latest
-    environment:
-      name: production # 設置環境名稱
-      url: ${{ steps.deployment.outputs.page_url }}
-
-    steps:
-      # 部署到 GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v1
