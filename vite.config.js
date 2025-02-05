@@ -7,9 +7,7 @@ import { resolve } from "path";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
-  const publicPath = env.VITE_PUBLIC_PATH
-    ? `/${env.VITE_PUBLIC_PATH.replace(/^\/|\/$/g, "")}/`
-    : "./";
+  const publicPath = "/css-layout-demo/";
 
   console.log("Computed base:", publicPath);
 
