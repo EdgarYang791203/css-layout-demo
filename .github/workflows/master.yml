@@ -26,6 +26,10 @@ jobs:
         with:
           node-version: 22
 
+      # 新增這個步驟：產生 .env.production 檔案
+      - name: Create .env.production
+        run: echo "VITE_PUBLIC_PATH=${{ secrets.VITE_PUBLIC_PATH }}" > .env.production
+
       # 安裝依賴
       - name: Install dependencies
         run: npm install
