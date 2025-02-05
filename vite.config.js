@@ -7,8 +7,14 @@ import { resolve } from "path";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
 
+  const publicPath = env.VITE_PUBLIC_PATH
+    ? `/${env.VITE_PUBLIC_PATH.replace(/^\/|\/$/g, "")}/`
+    : "./";
+
+  console.log("Computed base:", publicPath);
+
   return {
-    base: mode === "production" ? `/${env.VITE_PUBLIC_PATH || ""}/` : "/",
+    base: mode === "production" ? publicPath : "/",
     plugins: [vue()],
     define: {
       __APP_ENV__: env.APP_ENV,
