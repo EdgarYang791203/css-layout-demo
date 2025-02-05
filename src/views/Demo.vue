@@ -202,6 +202,7 @@ function setSize() {
 const resizeObserver = new ResizeObserver(setSize);
 
 onMounted(() => {
+  console.log("Demo.vue mounted");
   init();
   if (rendererContainer.value) {
     resizeObserver.observe(rendererContainer.value);
